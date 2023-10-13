@@ -1,0 +1,11 @@
+
+config main
+	option use_auth '0'
+	option date_format 'd.m.o'
+	option time_format 'H:i:s'
+	option show_second '0'
+	option favicon_path '/etc/tinyfilemanager/favicon.png'
+	option online_viewer '0'
+	option global_readonly '0'
+	option max_upload_size '250'
+
