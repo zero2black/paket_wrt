@@ -1,6 +1,6 @@
 
 config main
-	option use_auth '1'
+	option use_auth '0'
 	list auth_users 'admin:$2y$10$BewzfQXrlnUihprEgGt7ROMB9NigZcZkkwssIRYznF9fwMuObIZoa'
 	list auth_users 'user:$2y$10$Fg6Dz8oH9fPoZ2jJan5tZuv6Z4Kp7avtQ9bDfrdRntXtPeiMAZyGO'
 	list readonly_users 'user'
