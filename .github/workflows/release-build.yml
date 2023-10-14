@@ -94,7 +94,7 @@ jobs:
         env:
           ARCH: ${{ matrix.arch }}-${{ matrix.sdk }}
           FEEDNAME: packages_ci
-          PACKAGES: adguardhome
+          PACKAGES: luci-app-adguardhome
           NO_REFRESH_CHECK: true
 
       - name: Upload artifacts
