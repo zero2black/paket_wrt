@@ -36,7 +36,7 @@ jobs:
           echo "DATETIME=$(date +'%Y-%m-%d_%H%M%S')" >> $GITHUB_ENV
           
       - name: Build
-        uses: sbwml/openwrt-gh-action-sdk@go1.21
+        uses: sbwml/openwrt-gh-action-sdk@helloworld
         env:
           ARCH: ${{ matrix.arch }}-openwrt-23.05
           FEEDNAME: packages_ci
