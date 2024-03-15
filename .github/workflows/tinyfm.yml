@@ -11,6 +11,7 @@ on:
         options:  
         - 22.03.3
         - 23.05.0
+        - 23.05.2
         - snapshot
       
 jobs:
