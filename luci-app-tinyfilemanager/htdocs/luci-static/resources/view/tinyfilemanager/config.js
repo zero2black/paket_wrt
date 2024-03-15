@@ -153,11 +153,8 @@ return view.extend({
 		o.inputtitle = _('Check update');
 		o.inputstyle = 'apply';
 		o.onclick = function() {
-			window.setTimeout(function() {
-				window.location = window.location.href.split('#')[0];
-			}, L.env.apply_display * 1000);
-
 			return fs.exec('/etc/init.d/tinyfilemanager', ['check'])
+				.then(function(res) { return window.location.reload() })
 				.catch(function(e) { ui.addNotification(null, E('p', e.message), 'error') });
 		};
 
@@ -175,7 +172,7 @@ return view.extend({
 			o.onclick = L.bind(function(ev, section_id) {
 				var releasestag=document.getElementById('widget.' + this.cbid(section_id).match(/.+\./) + '_releaseslist').value;
 				//alert(releasestag);
-				return fs.exec('/usr/libexec/tinyfilemanager-update', [releasestag])
+				return fs.exec_direct('/usr/libexec/tinyfilemanager-update', [releasestag])
 					.catch(function(e) { ui.addNotification(null, E('p', e.message), 'error') });
 			}, o)
 		};
