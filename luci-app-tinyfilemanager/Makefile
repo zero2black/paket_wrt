@@ -21,6 +21,7 @@ endef
 
 define Package/$(LUCI_NAME)/postinst
 #!/bin/sh
+chmod -R 755 /etc/init.d/tinyfilemanager
 mkdir -p "$${IPKG_INSTROOT}/www/tinyfilemanager" 2>/dev/null
 [ ! -d "$${IPKG_INSTROOT}/www/tinyfilemanager/rootfs" ] && ln -s / "$${IPKG_INSTROOT}/www/tinyfilemanager/rootfs"
 total_size_limit=5G        #post_max_size = 8M
