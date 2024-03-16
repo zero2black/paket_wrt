@@ -65,7 +65,7 @@ jobs:
           cd sdk
           ./scripts/feeds install luci-app-tinyfilemanager
           #./scripts/feeds install luci-app-netmonitor
-          make defconfig
+          make menuconfig
       - name: Compile RTA (main)
         id: compile
         run: |
