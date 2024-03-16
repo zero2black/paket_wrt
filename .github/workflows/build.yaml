@@ -54,10 +54,10 @@ jobs:
           file_name=$(echo ${{env.url_sdk}} | awk -F/ '{print $NF}')
           mkdir sdk && tar -xJf $file_name -C ./sdk --strip-components=1
           cd sdk  
-          echo "src-git base https://github.com/openwrt/openwrt.git;openwrt-21.02" > feeds.conf
-          echo "src-git-full packages https://github.com/openwrt/packages.git;openwrt-21.02" >> feeds.conf
-          echo "src-git-full luci https://git.openwrt.org/project/luci.git;openwrt-21.02" >> feeds.conf
-          echo "src-git-full routing https://git.openwrt.org/feed/routing.git;openwrt-21.02"  >> feeds.conf
+          echo "src-git base https://github.com/openwrt/openwrt.git;openwrt-23.05" > feeds.conf
+          echo "src-git-full packages https://github.com/openwrt/packages.git;openwrt-21.05" >> feeds.conf
+          echo "src-git-full luci https://git.openwrt.org/project/luci.git;openwrt-23.05" >> feeds.conf
+          echo "src-git-full routing https://git.openwrt.org/feed/routing.git;openwrt-23.05"  >> feeds.conf
           git clone https://github.com/${{ github.repository }}.git package/downloads
           ./scripts/feeds update -a
           for package in ${{ steps.list_package.outputs.content}}; do
