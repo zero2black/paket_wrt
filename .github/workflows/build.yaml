@@ -1,4 +1,4 @@
-name: "Auto compile with OpenWrt SDK"
+ name: "Auto compile with OpenWrt SDK"
 on:
   repository_dispatch:
   workflow_dispatch:
@@ -65,7 +65,7 @@ jobs:
           cd sdk
           ./scripts/feeds install luci-app-tinyfilemanager
           #./scripts/feeds install luci-app-netmonitor
-          make menuconfig
+          make defconfig
       - name: Compile RTA (main)
         id: compile
         run: |
