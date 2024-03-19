@@ -66,13 +66,13 @@ jobs:
        #   pnpm run build
 
       # 复制 web至 luci
-      - run: |
-          mkdir ${IPK_NAME}/htdocs
-          cp -r web/dist/luci-static ${IPK_NAME}/htdocs
+      #- run: |
+      #    mkdir ${IPK_NAME}/htdocs
+      #    cp -r web/dist/luci-static ${IPK_NAME}/htdocs
 
       # 写入版本号
-      - run: |
-          sed -i  's/PKG_VERSION:=\(.*\)/PKG_VERSION:=${{ inputs.version }}/g' ${IPK_NAME}/Makefile
+     # - run: |
+        #  sed -i  's/PKG_VERSION:=\(.*\)/PKG_VERSION:=${{ inputs.version }}/g' ${IPK_NAME}/Makefile
 
       - name: Import Env
         env:
