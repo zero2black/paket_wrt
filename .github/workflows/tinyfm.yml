@@ -14,7 +14,7 @@ on:
         default: "x64"
 env:
   TZ: Asia/Shanghai
-  IPK_NAME: luci-app-tailscaler
+  IPK_NAME: luci-app-tinyfilemanager
 
 permissions:
   contents: write
@@ -115,8 +115,8 @@ jobs:
         run: |
           cat <<EOF >${SDK_NAME}/.config
           # CONFIG_SIGNED_PACKAGES is not set
-          CONFIG_LUCI_LANG_zh_Hans=y
-          CONFIG_LUCI_LANG_zh-cn=y
+          CONFIG_LUCI_LANG_zh_Hans=n
+          CONFIG_LUCI_LANG_zh-cn=n
           EOF
 
       - name: Defconfig
