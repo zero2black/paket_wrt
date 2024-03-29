@@ -20,7 +20,7 @@ jobs:
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
-        repo_name: zero2black/paket_wrt
+        repo_name: zero2black/wrtbuild
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: list_packages.txt
         asset_name: mything
