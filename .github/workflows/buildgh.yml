@@ -21,7 +21,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         #repo_name: owner/wrtbuild
-        repository: zero2black/paket_wrt
+        repository: zero2black/wrtbuild
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: list_packages.txt
         asset_name: mything
