@@ -1,0 +1,31 @@
+name: Publish
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  #  inputs:
+  #    release: 
+  #      description: 将编译出的镜像上传到 Release
+ #       required: true
+  #      default: 'true'
+
+
+jobs:
+  build:
+    name: Publish binaries
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        #repo_name: owner/wrtbuild
+        repository: zero2black/paket_wrt
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: link_luar.txt
+        asset_name: mything
+        tag: ${{ github.ref }}
+        release_name: "this is the name of the release"
+        overwrite: true
+        body: "This is my release text"
