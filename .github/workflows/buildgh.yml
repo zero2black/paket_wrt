@@ -23,7 +23,7 @@ jobs:
         #repo_name: owner/wrtbuild
         repository: zero2black/paket_wrt
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: link_luar.txt
+        file: list_packages.txt
         asset_name: mything
         tag: ${{ github.ref }}
         release_name: "this is the name of the release"
