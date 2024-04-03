@@ -18,14 +18,13 @@ jobs:
     permissions:
         contents: write
     
-
     steps:
     - uses: actions/checkout@v4
     - name: Uploading Release
       uses: svenstaro/upload-release-action@v2
       with:
             repo_name: zero2black/wrtbuild
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
+            repo_token: ${{ secrets.REALESES_TOKEN }}
             file: list_packages.txt
             asset_name: "test"
             tag: autobuildg
