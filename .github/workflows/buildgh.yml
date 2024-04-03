@@ -26,6 +26,6 @@ jobs:
             repo_name: zero2black/wrtbuild
             repo_token: ${{ secrets.REALESES_TOKEN }}
             file: list_packages.txt
-            asset_name: "test"
+            asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
             tag: autobuildg
             overwrite: true
