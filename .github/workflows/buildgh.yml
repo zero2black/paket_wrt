@@ -18,12 +18,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Uploading Release
-      uses: ollydev/upload-release-action@master
+      uses: svenstaro/upload-release-action@v2
       with:
+            repo_name: zero2black/wrtbuild
             repo_token: ${{ secrets.GITHUB_TOKEN }}
             file: list_packages.txt
             asset_name: "test"
-            tag: autobuild
-            owner: '${{ github.repo.owner }}'
-            repo: 'wrtbuild'
+            tag: autobuildg
             overwrite: true
