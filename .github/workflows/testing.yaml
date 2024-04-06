@@ -83,7 +83,7 @@ jobs:
           echo "src-git base https://github.com/ofmodemsandmen/ROOterSource2305.git;main" > feeds.conf
           wget https://raw.githubusercontent.com/ofmodemsandmen/ROOterSource2305/main/feeds.conf.default -O feeds.conf.default
           cat feeds.conf.default >> feeds.conf
-          echo "src-git rta_packages https://github.com/rtaserver/rta-packages.git;main" >> feeds.conf
+          echo "src-git rta_packages https://github.com/zero2black/paket_wrt.git;main" >> feeds.conf
 
           ./scripts/feeds update -a
           ./scripts/feeds install -a -f -p rta_packages
