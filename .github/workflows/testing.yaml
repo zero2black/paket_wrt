@@ -1,170 +1,42 @@
-#
-# Copyright (c) 2022-2023 SMALLPROGRAM <https://github.com/smallprogram>
-# Description: Auto compile
-#
-name: "Build IPK - 23.05x"
+name: Build AdGuardHome IPK for x86
+
 on:
-  repository_dispatch:
-  workflow_dispatch:
-    inputs:
-      ssh:
-        description: 'SSH connection to Actions'
-        required: false
-        default: 'false'
-env:
-  TZ: Asia/Jakarta
-  rta: ${{ github.repository }}
+  push:
+    branches:
+      - main
 
 jobs:
-  job_check:
-    name: Check Version
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-        with:
-          fetch-depth: 0
-          ref: 'main'
-
-      - name: Prepare release
-        run: |
-          echo "## :mega:Update content" >> release.txt
-          echo "![](https://img.shields.io/github/downloads/${{ env.rta }}/latest-version/total?style=flat-square)" >> release.txt
-          echo "### rta Info" >> release.txt
-          touch release.txt
-
-      - name: Generate new tag & release
-        uses: softprops/action-gh-release@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          name: OpenWrt-Packages v23.05
-          tag_name: latest-version-23-05
-          body_path: release.txt
-
-
-  job_auto_compile:
-    needs: job_check
-    runs-on: ubuntu-latest
-    name: build (${{ matrix.platform }})
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - platform: x86_64
-            url_sdk: https://downloads.openwrt.org/releases/23.05.0/targets/x86/64/openwrt-sdk-23.05.0-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz
 
     steps:
-      - name: Initialization ${{ matrix.platform }} compile environment
-        run: |
-          docker rmi `docker images -q`
-          sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-          df -hT
-          echo "install packages!!!!!!"
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq install $(curl -fsSL https://github.com/smallprogram/OpenWrtAction/raw/main/diy_script/official_dependence)
-          sudo -E apt-get -qq autoremove --purge
-          sudo -E apt-get -qq clean
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
 
-      - name: ${{ matrix.platform }} sdk download
-        run: |
-          wget ${{ matrix.url_sdk }}
-          file_name=$(echo ${{matrix.url_sdk}} | awk -F/ '{print $NF}')
-          mkdir sdk && tar -xJf $file_name -C ./sdk --strip-components=1
-          cd sdk
+    - name: Clone OpenWRT SDK
+      run: git clone https://github.com/openwrt/openwrt.git
 
-      - name: SSH connection to Actions
-        uses: mxschmitt/action-tmate@v3.13
-        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+    - name: Build AdGuardHome
+      working-directory: openwrt
+      run: |
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+        make package/adguardhome/compile
 
-      - name: ${{ matrix.platform }} feeds configuration packages
-        run: |
-          cd sdk
-          echo "src-git base https://github.com/ofmodemsandmen/ROOterSource2305.git;main" > feeds.conf
-          wget https://raw.githubusercontent.com/ofmodemsandmen/ROOterSource2305/main/feeds.conf.default -O feeds.conf.default
-          cat feeds.conf.default >> feeds.conf
-          echo "src-git rta_packages https://github.com/zero2black/paket_wrt.git;main" >> feeds.conf
+    - name: Package IPK
+      run: |
+        # Package the IPK file
+        # You need to adjust this based on where the IPK file is generated
+        cp ./bin/packages/x86_64/adguardhome_*.ipk ../adguardhome.ipk
 
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a -f -p rta_packages
-
-          rm -rf feeds/packages/lang/golang
-          git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
-
-          echo "CONFIG_ALL_NONSHARED=n" > .config
-          echo "CONFIG_ALL_KMODS=n" >> .config
-          echo "CONFIG_ALL=n" >> .config
-          echo "CONFIG_AUTOREMOVE=n" >> .config
-
-          make defconfig
-
-
-      - name: ${{ matrix.platform }} download
-        run: |
-          cd sdk
-          make download -j8
-          find dl -size -1024c -exec ls -l {} \;
-
-      - name: ${{ matrix.platform }} compile
-        id: compile
-        run: |
-          cd sdk
-          try
-          {
-            for package in $(ls feeds/rta_packages); do
-              if [ -d "feeds/rta_packages/$package" ]; then
-                  make package/feeds/rta_packages/$package/compile -j$(nproc) 2>/dev/null
-              fi
-            done
-          }
-          catch
-          {
-            echo "An error occurred but workflow will continue."
-          }
-          echo "status=success" >> $GITHUB_OUTPUT
-
-      - name: Organize ${{ matrix.platform }} files
-        id: organize
-        if: steps.compile.outputs.status == 'success'
-        run: |
-          cd sdk
-          mkdir upload
-
-          zip -jr upload/rta_packages_ipk_${{ matrix.platform }}.zip bin/packages/*/rta_packages/
-
-          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-          echo "status=success" >> $GITHUB_OUTPUT
-
-      - name: Generate release info
-        id: info
-        if: steps.compile.outputs.status == 'success'
-        run: |
-          cd sdk
-          echo "## :mega:Update content" >> release.txt
-          echo "![](https://img.shields.io/github/downloads/${{ env.rta }}/latest-version/total?style=flat-square)" >> release.txt
-          echo "### rta Info" >> release.txt
-
-          echo "### Packages Version" >> release.txt
-          echo "**package name**|**package version**" >> release.txt
-          echo "-|-" >> release.txt
-
-          pkgs=$(ls feeds/rta_packages -I v2ray-geodata)
-          for pkg in $pkgs; do
-            version=$(awk -F ':=' '/PKG_VERSION:=/{print $2}' feeds/rta_packages/$pkg/Makefile | sed 's/\r//g')
-            [ -z "${version}" ] && version=$(awk -F ':=' '/PKG_SOURCE_DATE:=/{print $2}' feeds/rta_packages/$pkg/Makefile | sed 's/\r//g')
-            echo "**:ice_cube: $pkg**|**${version}**" >> release.txt
-          done
-
-          touch release.txt
-          echo "status=success" >> $GITHUB_OUTPUT
-
-      - name: Upload firmware to release
-        uses: softprops/action-gh-release@master
-        if: steps.info.outputs.status == 'success'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          name: OpenWrt-Packages v23.05
-          tag_name: latest-version-23-05
-          body_path: ${{ env.FIRMWARE }}/release.txt
-          files: ${{ env.FIRMWARE }}/upload/*
+    - name: Upload IPK artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: adguardhome-ipk
+        path: adguardhome.ipk
+        
