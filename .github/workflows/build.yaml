@@ -63,6 +63,7 @@ jobs:
       - name: Configure RTA (main)
         run: |
           cd sdk
+          ./scripts/feeds/update -a && ./scripts/feeds/install -a
           ./scripts/feeds install adguardhome
           #./scripts/feeds install luci-app-netmonitor
           make defconfig
