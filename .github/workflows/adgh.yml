@@ -2,8 +2,8 @@ name: Buildx
 
 on:
   push:
-    tags:
-      - v3.**
+  #  tags:
+ #     - v3.**
 
 jobs:
   build:
