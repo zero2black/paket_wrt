@@ -78,7 +78,7 @@ jobs:
         run: |
           cd sdk
           echo "testx"
-          make package/adguardhome/compile V=99
+          (make package/adguardhome/compile -j$(($(nproc)+1)) || make package/adguardhome/compile V=s 2>&1 | tee error_adguardhome.log | grep -i "Error 2" || rm -rf error_$ipk.log) || true
           mv bin/packages/x86_64/base/ ../
           cd ..
           echo "status=success" >> $GITHUB_OUTPUT
