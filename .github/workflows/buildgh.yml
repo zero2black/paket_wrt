@@ -1,31 +1,204 @@
-name: Publish
+#=================================================
+# Description: Build OpenWrt using GitHub Actions
+# Lisence: MIT
+# Blog: https://helmiau.com
+# HelmiWrt by helmiau.com
+# Script base by P3TERX
+#=================================================
+
+name: Build IPK gg
 
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  #  inputs:
-  #    release: 
-  #      description: 将编译出的镜像上传到 Release
- #       required: true
-  #      default: 'true'
+    inputs:
+      branch:
+        type: choice
+        description: Select OpenWrt Branch.
+        required: true
+        default: 21.02.5
+        options:  
+        - 18.06.0
+        - 18.06.0-rc1
+        - 18.06.0-rc2
+        - 18.06.1
+        - 18.06.2
+        - 18.06.3
+        - 18.06.4
+        - 18.06.5
+        - 18.06.6
+        - 18.06.7
+        - 18.06.8
+        - 18.06.9
+        - 21.02.0
+        - 21.02.0-rc1
+        - 21.02.0-rc2
+        - 21.02.0-rc3
+        - 21.02.0-rc4
+        - 21.02.1
+        - 21.02.2
+        - 21.02.3
+        - 21.02.4
+        - 21.02.5
+        - 22.03.0
+        - 22.03.0-rc1
+        - 22.03.0-rc4
+        - 22.03.0-rc5
+        - 22.03.0-rc6
+        - 22.03.1
+        - 22.03.2
+        - 22.03.3
+        - snapshot
+      platform:
+        type: choice
+        description: Select device platform.
+        required: true
+        default: bcm27xx/bcm2711
+        options: 
+        - armvirt/32
+        - armvirt/64
+        - bcm27xx/bcm2708
+        - bcm27xx/bcm2709
+        - bcm27xx/bcm2710
+        - bcm27xx/bcm2711
+#        - ramips/mt7620
+#        - ramips/mt7621
+#        - ramips/mt76x8
+#        - ramips/rt288x
+#        - ramips/rt305x
+#        - ramips/rt3883
+        - rockchip/armv8
+        - sunxi/cortexa53
+        - sunxi/cortexa7
+#        - sunxi/cortexa8
+        - x86/64
+        - x86/generic
+#        - x86/geode
+#        - x86/legacy
 
+env:
+  CONFIG_FILE: build-ipk/universal.config
+  UPLOAD_RELEASE: true
+  TZ: Asia/Jakarta
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  DIY_SH: build-ipk/immortalwrt.sh
 
 jobs:
-  build:
-    name: Publish binaries
-    runs-on: ubuntu-latest
-    
-    permissions:
-        contents: write
-    
+  Build:
+    runs-on: ubuntu-20.04
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Uploading Release
-      uses: svenstaro/upload-release-action@v2
-      with:
-            repo_name: zero2black/wrtbuild
-            repo_token: ${{ secrets.REALESES_TOKEN }}
-            file: list_packages.txt
-           # asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-            tag: autobuildg
-            overwrite: true
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Initialization Environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo timedatectl set-timezone "$TZ"
+          sudo mkdir -p /workdir
+          sudo chown $USER:$GROUPS /workdir
+          export FILE_DATE=$(date +"%Y.%m.%d")
+          echo "FILE_DATE=$FILE_DATE" >> $GITHUB_ENV
+          export REPO_BRANCH=$(echo "${{ github.event.inputs.branch }}")
+          echo "REPO_BRANCH=$REPO_BRANCH" >> $GITHUB_ENV
+          export PLATFORM=$(echo "${{ github.event.inputs.platform }}")
+          echo "PLATFORM=$PLATFORM" >> $GITHUB_ENV
+          export PLATFORM_SUB=$(echo "$PLATFORM" | sed 's|\/|\-|g')
+          echo "PLATFORM_SUB=$PLATFORM_SUB" >> $GITHUB_ENV
+          if [[ "$REPO_BRANCH" == "snapshot" ]];then
+            export BRANCH_REL="snapshot"
+          else
+            export BRANCH_REL=$(echo "releases/$REPO_BRANCH")
+          fi
+          echo "BRANCH_REL=$BRANCH_REL" >> $GITHUB_ENV
+          export BUILD_CONFIG="$GITHUB_WORKSPACE/$CONFIG_FILE"
+          echo "BUILD_CONFIG=$BUILD_CONFIG" >> $GITHUB_ENV
+
+      - name: Clone SDK
+        id: clone_sdk
+        working-directory: /workdir
+        run: |
+          df -hT $PWD
+          export REPO_SDK=$(echo "https://downloads.openwrt.org/${BRANCH_REL}/targets/${PLATFORM}/openwrt-sdk-${REPO_BRANCH}-${PLATFORM_SUB}_gcc-8.4.0_musl.Linux-x86_64.tar.xz")
+          echo "REPO_SDK=${REPO_SDK}" >> $GITHUB_ENV
+          echo "sdk url:: ${REPO_SDK}"
+          wget ${REPO_SDK}
+          tar xf *.tar.xz
+          rm -f *.tar.xz
+          mv openwrt-* /workdir/openwrt
+          ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+          export OPENWRT_ROOT_PATH="$GITHUB_WORKSPACE/openwrt"
+          echo "OPENWRT_ROOT_PATH=$OPENWRT_ROOT_PATH" >> $GITHUB_ENV
+          echo "BUILD_OPT=$BUILD_OPT" >> $GITHUB_ENV
+          echo -e "===== Information ====="
+          echo -e "FILE_DATE is ....... $FILE_DATE"
+          echo -e "OPENWRT_ROOT_PATH is ....... $OPENWRT_ROOT_PATH"
+          echo -e "PLATFORM is ....... $PLATFORM"
+          echo -e "===== End of Information ====="
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Load Configuration
+        id: load_cfg
+        if: steps.clone_sdk.outputs.status == 'success' && !cancelled()
+        run: |
+          cd $OPENWRT_ROOT_PATH
+          chmod +x $GITHUB_WORKSPACE/build-ipk/*.sh
+          $GITHUB_WORKSPACE/$DIY_SH
+          # cat $GITHUB_WORKSPACE/$CONFIG_FILE >> $OPENWRT_ROOT_PATH/.config
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Install Feeds
+        id: install_feeds
+        if: steps.load_cfg.outputs.status == 'success' && !cancelled()
+        run: |
+          cd $OPENWRT_ROOT_PATH
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Compile Packages
+        id: compile
+        if: steps.install_feeds.outputs.status == 'success' && !cancelled()
+        run: |
+          [[ ! -d ipkg ]] && mkdir -p ipkg
+          cd $OPENWRT_ROOT_PATH
+          sed -i -e '/^#/d' -i -e '/^[[:blank:]]*$/ d' "${BUILD_CONFIG}"
+          echo -e "===== List of Apps ====="
+          cat $BUILD_CONFIG
+          echo -e "===== List of Apps ====="    
+          make defconfig   
+          while IFS= read -r line # Read a line
+          do
+            make package/${line}/compile -j${nproc} V=w
+            find bin/ -type f -name '*${line}*' -exec mv -t ../ipkg {} +
+          done < "$BUILD_CONFIG"
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Generate New Release Tag
+        id: tag
+        if: steps.organize.outputs.status == 'success' && !cancelled()
+        run: |
+          sleep 10
+          echo "release_tag=ipk" >> $GITHUB_OUTPUT
+          touch release.txt
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Upload HelmiWrt Packages to GitHub Release
+        uses: softprops/action-gh-release@v1
+        if: steps.tag.outputs.status == 'success' && !cancelled()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          prerelease: false
+          name: IPK Build ${{ env.FILE_DATE }}
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          files: |
+            # ${{ env.LUCITHEMEPATH }}-*
+            # ${{ env.LUCIAPPPATH }}-*
+            # ${{ env.PKGPATH }}/mactoiface.*
+            ${{ env.paketHelmiWrt }}/*
+          body: |
+            **HelmiWrt LuCI App and Theme IPK for OpenWrt**
+            THESE PACKAGES IS COOLSNOWWOLF LEDE FIRMWARE BASED !!!!! NOT OFFICIAL OPENWRT BASE !!!!
+            DWYOR (DO WITH YOUR OWN RISK)
+            [Donation here](https://www.helmiau.com/pay) • [Installation Tutorial](https://www.google.com/search?q=helmiau.com+helmiwrt+packages)
