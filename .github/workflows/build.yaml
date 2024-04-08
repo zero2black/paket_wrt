@@ -61,10 +61,11 @@ jobs:
           echo "src-git-full routing https://git.openwrt.org/feed/routing.git;openwrt-23.05"  >> feeds.conf
           git clone https://github.com/${{ github.repository }}.git package/downloads
           ./scripts/feeds update -a
-          ./scripts/feeds install -d n adguardhome
+          
           #./scripts/feeds install -d n luci-app-netmonitor
           rm -rf feeds/packages/lang/golang
-          git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang          
+          git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
+          ./scripts/feeds install -d n adguardhome
 
 
       - name: Configure RTA (main)
