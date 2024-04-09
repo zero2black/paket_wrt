@@ -31,11 +31,11 @@ jobs:
           NO_REFRESH_CHECK: true
          
 
-      #- name: Store packages
-      #  uses: actions/upload-artifact@main
-     #   with:
-      #    name: ${{ matrix.arch }}-${{ matrix.sdk }}
-     #     path: bin/packages/${{ matrix.arch }}/packages_ci/*.ipk
+      - name: Store packages
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ matrix.arch }}-${{ matrix.sdk }}
+          path: bin/packages/${{ matrix.arch }}/packages_ci/*.ipk
 
       #- name: Zip packages
       #  run: |
