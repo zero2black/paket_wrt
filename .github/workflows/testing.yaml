@@ -68,4 +68,4 @@ jobs:
           keep_latest: 60
           delete_tags: true
         env:
-           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+           GITHUB_TOKEN: ${{ secrets.REALESES_TOKEN }}
