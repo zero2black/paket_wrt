@@ -27,7 +27,7 @@ jobs:
         env:
           ARCH: ${{ matrix.arch }}-${{ matrix.sdk }}
           FEEDNAME: packages_ci
-          PACKAGES: luci-app-tinyfilemanager
+          PACKAGES: luci-app-tinyfilemanager luci-app-adguardhome
           NO_REFRESH_CHECK: true
          
 
@@ -59,13 +59,13 @@ jobs:
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@main
         with:
-          retain_days: 10
+          retain_days: 1
           keep_minimum_runs: 0
     
-      - name: Remove old Releases
-        uses: dev-drprasad/delete-older-releases@master
-        with:
-          keep_latest: 60
-          delete_tags: true
-        env:
-           GITHUB_TOKEN: ${{ secrets.REALESES_TOKEN }}
+      #- name: Remove old Releases
+       # uses: dev-drprasad/delete-older-releases@master
+       # with:
+       #   keep_latest: 60
+      #    delete_tags: true
+      #  env:
+      #     GITHUB_TOKEN: ${{ secrets.REALESES_TOKEN }}
