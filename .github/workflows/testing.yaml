@@ -27,7 +27,7 @@ jobs:
         env:
           ARCH: ${{ matrix.arch }}-${{ matrix.sdk }}
           FEEDNAME: packages_ci
-          PACKAGES: luci-app-tinyfilemanager luci-app-adguardhome
+          PACKAGES: luci-app-adguardhome luci-app-tinyfilemanager
           NO_REFRESH_CHECK: true
          
 
