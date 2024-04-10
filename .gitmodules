@@ -1,0 +1,3 @@
+[submodule "luci-app-netspeedtest"]
+	path = luci-app-netspeedtest
+	url = https://github.com/muink/luci-app-netspeedtest.git
