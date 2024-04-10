@@ -27,7 +27,7 @@ jobs:
         env:
           ARCH: ${{ matrix.arch }}-${{ matrix.sdk }}
           FEEDNAME: packages_ci
-          PACKAGES: luci-app-adguardhome
+          PACKAGES: luci-app-netspeedtest
           NO_REFRESH_CHECK: true
          
 
