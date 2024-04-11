@@ -30,7 +30,7 @@ jobs:
           PACKAGES: luci-app-argon-config luci-theme-argon
           NO_REFRESH_CHECK: true
          
->
+
       - name: Store packages
         uses: actions/upload-artifact@main
         with:
