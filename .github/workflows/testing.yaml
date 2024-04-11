@@ -27,10 +27,10 @@ jobs:
         env:
           ARCH: ${{ matrix.arch }}-${{ matrix.sdk }}
           FEEDNAME: packages_ci
-          PACKAGES: luci-app-netspeedtest
+          PACKAGES: luci-app-argon-config luci-theme-argon
           NO_REFRESH_CHECK: true
          
-
+>
       - name: Store packages
         uses: actions/upload-artifact@main
         with:
