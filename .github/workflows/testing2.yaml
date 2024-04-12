@@ -8,6 +8,7 @@ on:
         description: "namapaket"
         required: false
         default: ""
+        type: text
         options:
           - 30
           - 20
