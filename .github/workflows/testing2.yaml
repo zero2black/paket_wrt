@@ -7,7 +7,7 @@ on:
       namapaket:
         description: "namapaket"
         required: false
-        default: ""
+        default: "luci-app-"
         type: text
         options:
           - 30
