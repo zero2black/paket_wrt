@@ -3,8 +3,8 @@ name: T2 Build custom
 on:
   repository_dispatch:
   workflow_dispatch:
-  inputs:
-    namapaket:
+    inputs:
+      namapaket:
         description: "namapaket"
         required: false
         default: ""
