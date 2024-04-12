@@ -4,8 +4,8 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      namapaket:
-        description: "namapaket"
+      namapaket1:
+        description: "namapaket1"
         required: false
         default: "luci-app-"
         type: text
