@@ -9,6 +9,11 @@ on:
         required: false
         default: "luci-app-"
         type: text
+      namapaket:
+        description: "namapaket"
+        required: false
+        default: "luci-app-"
+        type: choice
         options:
           - 30
           - 20
