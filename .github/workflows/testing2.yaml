@@ -15,7 +15,7 @@ on:
         default: "luci-app-"
         type: choice
         options:
-          - 30
+          - luci-app-tinyfilemanager
           - 20
           - 10
           - 9
