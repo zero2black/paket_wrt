@@ -11,7 +11,7 @@ LUCI_PKGARCH:=all
 LUCI_DEPENDS:=+netdata
 
 PKG_NAME:=luci-app-netmonitor
-PKG_VERSION:=1.4
+PKG_VERSION:=2.1
 PKG_RELEASE:=1
 
 define Package/$(PKG_NAME)
