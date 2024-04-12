@@ -12,11 +12,11 @@ on:
       namapaket:
         description: "namapaket"
         required: false
-        default: "luci-app-"
+        default: "luci-app-netmonitor"
         type: choice
         options:
           - luci-app-tinyfilemanager
-          - 20
+          - luci-app-netmonitor
           - 10
           - 9
           - 8
