@@ -17,7 +17,7 @@ on:
         options:
           - luci-app-tinyfilemanager
           - luci-app-netmonitor
-          - 10
+          - luci-app-adguardhome
           - 9
           - 8
           - 7
