@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if ! grep -q 'netmonitor' /etc/crontabs/root; then
+    echo '*/5 * * * * netmonitor >/dev/null 2>&1' >> /etc/crontabs/root
+    /etc/init.d/cron restart
+fi
+rm -f /tmp/luci-indexcache
+
+chmod +x /usr/bin/netmonitor
+exit 0
