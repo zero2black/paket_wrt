@@ -1,5 +1,6 @@
 #!/bin/sh
 
+chmod +x /etc/init.d/tinyfilemanager
 # uhttpd
 uci -q get uhttpd.main.index_page|grep -i 'index.php' >/dev/null || uci add_list uhttpd.main.index_page='index.php'
 uci -q get uhttpd.main.interpreter|grep -i '.php=/usr/bin/php-cgi' >/dev/null || uci add_list uhttpd.main.interpreter='.php=/usr/bin/php-cgi'
