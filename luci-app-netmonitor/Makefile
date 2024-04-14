@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Net Monitor Lite
 LUCI_PKGARCH:=all
-LUCI_DEPENDS:=+netdata
+LUCI_DEPENDS:=+netdata +vnstat2 +vnstati2
 
 PKG_NAME:=luci-app-netmonitor
 PKG_VERSION:=2.1
