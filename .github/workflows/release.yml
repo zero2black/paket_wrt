@@ -32,7 +32,7 @@ jobs:
         env:
           url_sdk: https://archive.openwrt.org/releases/23.05.2/targets/x86/64/openwrt-sdk-23.05.2-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz
         run: |
-          wget ${{ env.url_sdk }}
+          wget -nv ${{ env.url_sdk }}
           file_name=$(echo ${{env.url_sdk}} | awk -F/ '{print $NF}')
           mkdir sdk && tar -xJf $file_name -C ./sdk --strip-components=1
           cd sdk  
@@ -41,7 +41,7 @@ jobs:
           echo "src-git-full luci https://git.openwrt.org/project/luci.git;openwrt-23.05" >> feeds.conf
           echo "src-git-full routing https://git.openwrt.org/feed/routing.git;openwrt-23.05"  >> feeds.conf
           # git clone -b master https://github.com/${{ github.repository }}.git package/downloads/luci-app-speedtest
-          svn checkout https://github.com/zero2black/paket_wrt/trunk/luci-app-tinyfilemanager package/downloads/luci-app-tinyfilemanager
+          git clone https://github.com/zero2black/paket_wrt.git package/downloads/luci-app-tinyfilemanager
           pushd package/downloads/luci-app-tinyfilemanager
           umask 022
           git checkout
