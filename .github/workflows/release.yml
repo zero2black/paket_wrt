@@ -7,9 +7,6 @@ env:
   TZ: Asia/Jakarta
 
 jobs:
-  
-
-
   job_build:
     name: Build OpenWRT
     needs: job_check
