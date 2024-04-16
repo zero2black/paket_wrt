@@ -11,7 +11,7 @@ on:
       target:
         description: 'build target ["arm64", "x64", "mipsel"]'
         required: true
-        default: "x86_64"
+        default: "x64"
 env:
   TZ: Asia/Shanghai
   IPK_NAME: luci-app-tinyfilemanager
