@@ -38,7 +38,7 @@ jobs:
           
           cd sdk
           echo "1"
-          make menuconfig
+        #  make menuconfig
           echo "2"
           ./scripts/feeds update -a
           echo "3"
