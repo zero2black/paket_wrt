@@ -49,9 +49,7 @@ jobs:
           umask 022
           git checkout
           popd
-# Select the package LuCI -> Applications -> luci-app-tinyfilemanager
           make menuconfig
-# Start compiling
           make package/luci-app-tinyfilemanager/compile V=99
 
       - name: Upload IPK to release
