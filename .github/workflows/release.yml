@@ -35,10 +35,15 @@ jobs:
           wget -nv ${{ env.url_sdk }}
           file_name=$(echo ${{env.url_sdk}} | awk -F/ '{print $NF}')
           mkdir sdk && tar -xJf $file_name -C ./sdk --strip-components=1
+          
           cd sdk
+          echo "1"
           make menuconfig
+          echo "2"
           ./scripts/feeds update -a
+          echo "3"
           ./scripts/feeds install -a
+          echo "4"
           git clone --depth 1 --branch master --single-branch --no-checkout https://github.com/muink/luci-app-tinyfilemanager.git package/luci-app-tinyfilemanager
           pushd package/luci-app-tinyfilemanager
           umask 022
