@@ -19,7 +19,7 @@ on:
           - luci-app-netmonitor
           - luci-app-adguardhome
           - autocore-arm
-          - 8
+          - autocore-x86
           - 7
           - 6
           - 5
