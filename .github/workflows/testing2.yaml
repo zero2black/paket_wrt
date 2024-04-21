@@ -4,11 +4,11 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      namapaket1:
-        description: "namapaket1"
-        required: false
-        default: "luci-app-"
-        type: text
+      # namapaket1:
+    #    description: "namapaket1"
+     #   required: false
+    #    default: "luci-app-"
+    #    type: text
       namapaket:
         description: "namapaket"
         required: false
@@ -18,16 +18,10 @@ on:
           - luci-app-tinyfilemanager
           - luci-app-netmonitor
           - luci-app-adguardhome
-          - autocore-arm
+          - autocore
           - autocore-x86
-          - 7
-          - 6
-          - 5
-          - 4
-          - 3
-          - 2
-          - 1
-          - 0
+          
+        
 jobs:
   build:
     name: build ${{ matrix.arch }}-${{ matrix.sdk }}
