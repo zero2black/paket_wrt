@@ -6,12 +6,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=adguardhome
-PKG_VERSION:=0.107.48
+PKG_VERSION:=0.107.52
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/AdguardTeam/AdGuardHome/tar.gz/v$(PKG_VERSION)?
-PKG_HASH:=189afe8ccc4efd229c3554d812f590cc8727e966c05a6129d444c88a905b83a1
+PKG_HASH:=de6d99c4420d131b76e5d22b58ac91159e74e5783f02ada8b2f993f353e254f9
+PKG_BUILD_DIR:=$(BUILD_DIR)/AdGuardHome-$(PKG_VERSION)
 
 PKG_LICENSE:=GPL-3.0-only
 PKG_LICENSE_FILES:=LICENSE.txt
@@ -57,17 +58,13 @@ define Download/adguardhome-frontend
 	URL:=https://github.com/AdguardTeam/AdGuardHome/releases/download/v$(PKG_VERSION)/
 	URL_FILE:=AdGuardHome_frontend.tar.gz
 	FILE:=$(FRONTEND_FILE)
-        HASH:=48670d085bbdd7a70f4a4cbcba047dd94052190c5471ada5be92c334ed793aa2
+	HASH:=af9ae57b55a09a0aaf7c9a69a46734827443f98135d4c4b176874de3f9a449d8
 endef
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
-	if [ -d "$(BUILD_DIR)/AdGuardHome-$(PKG_VERSION)" ]; then \
-		mv "$(BUILD_DIR)/AdGuardHome-$(PKG_VERSION)/"* "$(BUILD_DIR)/adguardhome-$(PKG_VERSION)/"; \
-	fi
 
 	gzip -dc $(DL_DIR)/$(FRONTEND_FILE) | $(HOST_TAR) -C $(PKG_BUILD_DIR)/ $(TAR_OPTIONS)
-	( cd "$(BUILD_DIR)/adguardhome-$(PKG_VERSION)"; go mod tidy )
 endef
 
 define Package/adguardhome/install
