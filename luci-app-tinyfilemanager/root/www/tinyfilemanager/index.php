@@ -1,6 +1,6 @@
 <?php
 //Default Configuration
-$CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":true,"hide_Cols":false,"theme":"dark"}';
+$CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":false,"hide_Cols":false,"theme":"light"}';
 
 /**
  * H3K | Tiny File Manager V2.5.3
@@ -11,7 +11,7 @@ $CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":true,"hide_Cols":f
  */
 
 //TFM version
-define('VERSION', '2.5.3_8e87afa');
+define('VERSION', '2.5.3');
 
 //Application Title
 define('APP_TITLE', 'Tiny File Manager');
@@ -142,13 +142,6 @@ $ip_blacklist = array(
     '::'            // non-routable meta ipv6
 );
 
-// if User has the external config file, try to use it to override the default config above [config.php]
-// sample config - https://tinyfilemanager.github.io/config-sample.txt
-$config_file = __DIR__.'/config.php';
-if (is_readable($config_file)) {
-    @include($config_file);
-}
-
 // External CDN resources that can be used in the HTML (replace for GDPR compliance)
 $external = array(
     'css-bootstrap' => '<link href="assets/css/bootstrap.min.css" rel="stylesheet">',
@@ -158,12 +151,17 @@ $external = array(
     'js-ace' => '<script src="assets/js/ace.js"></script>',
     'js-bootstrap' => '<script src="assets/js/bootstrap.bundle.min.js"></script>',
     'js-dropzone' => '<script src="assets/js/dropzone.min.js"></script>',
-    'js-jquery' => '<script src="assets/js/jquery-3.7.1.min.js"></script>',
-    'js-jquery-datatables' => '<script src="assets/js/jquery.dataTables.min.js"></script>',
+    'js-jquery' => '<script src="assets/js/jquery-3.6.1.min.js"></script>',
+    'js-jquery-datatables' => '<script src="assets/js/datatables.min.js"></script>',
     'js-highlightjs' => '<script src="assets/js/highlight.min.js"></script>',
-    'pre-jsdelivr' => '<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"/>',
-    'pre-cloudflare' => '<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin/><link rel="dns-prefetch" href="https://cdnjs.cloudflare.com"/>'
 );
+
+// if User has the external config file, try to use it to override the default config above [config.php]
+// sample config - https://tinyfilemanager.github.io/config-sample.txt
+$config_file = __DIR__.'/config.php';
+if (is_readable($config_file)) {
+    @include($config_file);
+}
 
 // --- EDIT BELOW CAREFULLY OR DO NOT EDIT AT ALL ---
 
@@ -245,11 +243,7 @@ if (defined('FM_EMBED')) {
 
 //Generating CSRF Token
 if (empty($_SESSION['token'])) {
-    if (function_exists('random_bytes')) {
-        $_SESSION['token'] = bin2hex(random_bytes(32));
-    } else {
-    	$_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
-    }
+    $_SESSION['token'] = bin2hex(random_bytes(32));
 }
 
 if (empty($auth_users)) {
@@ -780,7 +774,7 @@ if (isset($_GET['copy'], $_GET['finish']) && !FM_READONLY) {
                $loop_count++;
             }
             if (fm_rcopy($from, $fn_duplicate, False)) {
-                fm_set_msg(sprintf('Copied from <b>%s</b> to <b>%s</b>', fm_enc($copy), fm_enc($fn_duplicate)));
+                fm_set_msg(sprintf('Copyied from <b>%s</b> to <b>%s</b>', fm_enc($copy), fm_enc($fn_duplicate)));
             } else {
                 fm_set_msg(sprintf('Error while copying from <b>%s</b> to <b>%s</b>', fm_enc($copy), fm_enc($fn_duplicate)), 'error');
             }
@@ -975,15 +969,7 @@ if (!empty($_FILES) && !FM_READONLY) {
                     if ($in) {
                         if (PHP_VERSION_ID < 80009) {
                             // workaround https://bugs.php.net/bug.php?id=81145
-                            do {
-                                for (;;) {
-                                    $buff = fread($in, 4096);
-                                    if ($buff === false || $buff === '') {
-                                        break;
-                                    }
-                                    fwrite($out, $buff);
-                                }
-                            } while (!feof($in));
+                            while (!feof($in)) { fwrite($out, fread($in, 4096)); }
                         } else {
                             stream_copy_to_stream($in, $out);
                         }
@@ -1729,7 +1715,7 @@ if (isset($_GET['view'])) {
                 // Image info
                 if ($is_image) {
                     $image_size = getimagesize($file_path);
-                    echo '<strong>'.lng('Image size').':</strong> ' . (isset($image_size[0]) ? $image_size[0] : '0') . ' x ' . (isset($image_size[1]) ? $image_size[1] : '0') . '<br>';
+                    echo lng('Image sizes').': ' . (isset($image_size[0]) ? $image_size[0] : '0') . ' x ' . (isset($image_size[1]) ? $image_size[1] : '0') . '<br>';
                 }
                 // Text info
                 if ($is_text) {
@@ -2249,6 +2235,7 @@ fm_show_footer();
 /**
  * It prints the css/js files into html
  * @param key The key of the external file to print.
+ * @return The value of the key in the  array.
  */
 function print_external($key) {
     global $external;
@@ -3567,7 +3554,7 @@ function fm_show_nav_path($path)
                 <ul class="navbar-nav justify-content-end <?php echo fm_get_theme();  ?>">
                     <li class="nav-item mr-2">
                         <div class="input-group input-group-sm mr-1" style="margin-top:4px;">
-                            <input type="text" class="form-control" placeholder="<?php echo lng('Search') ?>" aria-label="<?php echo lng('Search') ?>" aria-describedby="search-addon2" id="search-addon">
+                            <input type="text" class="form-control" placeholder="<?php echo lng('Filter') ?>" aria-label="<?php echo lng('Search') ?>" aria-describedby="search-addon2" id="search-addon">
                             <div class="input-group-append">
                                 <span class="input-group-text brl-0 brr-0" id="search-addon2"><i class="fa fa-search"></i></span>
                             </div>
