@@ -1,25 +1,27 @@
-name: Clone luci-theme-argon
+name: Clone luci-theme-argon Branch
 
 on:
   workflow_dispatch:
 
 jobs:
-  clone-luci-theme-argon:
+  clone-argon:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout target repository
       uses: actions/checkout@v3
 
-    - name: Clone luci-theme-argon
+    - name: Clone luci-theme-argon openwrt-24.10 branch
       run: |
         git config --global user.name "${{ github.actor }}"
         git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-        git remote add luci-theme-argon https://github.com/sbwml/luci-theme-argon.git
-        git fetch luci-theme-argon
-        git subtree add --prefix=luci-theme-argon luci-theme-argon master --squash
-
-    - name: Push changes to main
+        git clone --branch openwrt-24.10 --depth 1 https://github.com/sbwml/luci-theme-argon.git temp-luci-theme-argon
+        rm -rf luci-theme-argon
+        mv temp-luci-theme-argon luci-theme-argon
+        git add luci-theme-argon
+        git commit -m "Clone luci-theme-argon openwrt-24.10 branch"
+    
+    - name: Push changes to main branch
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
