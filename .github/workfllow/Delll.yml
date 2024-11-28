@@ -1,0 +1,38 @@
+name: Delete luci-theme-argon Directory
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type 'yes' to confirm deletion"
+        required: true
+
+jobs:
+  delete-directory:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Validate confirmation input
+      run: |
+        if [ "${{ github.event.inputs.confirm }}" != "yes" ]; then
+          echo "Deletion not confirmed. Exiting..."
+          exit 1
+        fi
+
+    - name: Delete luci-theme-argon directory
+      run: |
+        git config --global user.name "${{ github.actor }}"
+        git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+        git rm -r --cached luci-theme-argon
+        rm -rf luci-theme-argon
+        git commit -m "Delete luci-theme-argon directory"
+
+    - name: Push changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git push origin main
+        
