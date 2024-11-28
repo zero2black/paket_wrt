@@ -18,6 +18,8 @@ on:
           - luci-app-tinyfilemanager
           - luci-app-netmonitor
           - luci-app-adguardhome
+          - luci-theme-argon
+          - luci-app-argon-config
           - autocore
           - autocore-x86
           
