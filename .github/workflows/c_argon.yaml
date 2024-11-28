@@ -1,0 +1,26 @@
+name: Clone luci-theme-argon
+
+on:
+  workflow_dispatch:
+
+jobs:
+  clone-luci-theme-argon:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout target repository
+      uses: actions/checkout@v3
+
+    - name: Clone luci-theme-argon
+      run: |
+        git config --global user.name "${{ github.actor }}"
+        git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+        git remote add luci-theme-argon https://github.com/sbwml/luci-theme-argon.git
+        git fetch luci-theme-argon
+        git subtree add --prefix=luci-theme-argon luci-theme-argon master --squash
+
+    - name: Push changes to main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git push origin main
