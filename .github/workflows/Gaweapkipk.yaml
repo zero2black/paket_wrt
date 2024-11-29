@@ -53,17 +53,14 @@ jobs:
           NO_REFRESH_CHECK: true
          
 
-      - name: List compiled files
-        run: |
-         cd bin
-         find bin -name "*.ipk"
+      
          
       - name: Store packages
         uses: actions/upload-artifact@main
         with:
           name: ${{ matrix.arch }}-${{ matrix.sdk }}
           # path: bin/packages/${{ matrix.arch }}/packages_ci/*.ipk
-          path: bin/packages/${{ matrix.arch }}/packages_ci
+          path: bin/packages
 
       - name: Zip packages
         run: |
