@@ -1,32 +1,39 @@
-name: Copy Autocore
+name: Sync autocore-arm
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Manual trigger
+  schedule: # Runs daily at midnight (optional)
+    - cron: '0 0 * * *'
 
 jobs:
-  copy-luci-theme-argon:
+  sync-autocore-arm:
     runs-on: ubuntu-latest
 
     steps:
+    # Checkout your repository
     - name: Checkout Target Repository
       uses: actions/checkout@v3
 
-    - name: Clone sbwml/luci-theme-argon
+    # Clone the source repository
+    - name: Clone Source Repository
       run: |
-        git clone --depth 1 --branch openwrt-24.10 https://github.com/sbwml/autocore-arm.git temp-autocorw-arm
+        git clone --depth 1 --branch openwrt-24.10 https://github.com/sbwml/autocore-arm.git source_repo
+
+    # Copy files into the autocore-arm folder
+    - name: Copy Files to autocore-arm Folder
+      run: |
         mkdir -p autocore-arm
-        cp -r temp-autocore-arm/* ./autocore-arm/
-        rm -rf temp-autocore-arm
+        rsync -a source_repo/ autocore-arm/
 
-    - name: Commit Changes
+    # Configure Git
+    - name: Configure Git
       run: |
-        git config --global user.name "${{ github.actor }}"
-        git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-        git add luci-app-argon-config luci-theme-argon
-        git commit -m "Copy sbwml (openwrt-24.10 branch)"
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
 
-    - name: Push Changes to Main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Commit and push changes
+    - name: Commit and Push Changes
       run: |
-        git push origin main
+        git add autocore-arm
+        git commit -m "Sync autocore-arm from openwrt-24.10 branch" || echo "No changes to commit"
+        git push
