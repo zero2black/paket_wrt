@@ -36,9 +36,13 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
+    # Ensure autocore-arm files are staged for commit
+    - name: Stage autocore-arm Folder
+      run: |
+        git add autocore-arm/*
+
     # Commit and push changes
     - name: Commit and Push Changes
       run: |
-        git add autocore-arm
-        git commit -m "Initial copy of autocore-arm from openwrt-24.10 branch"
+        git commit -m "Initial copy of autocore-arm from openwrt-24.10 branch" || echo "No changes to commit"
         git push
