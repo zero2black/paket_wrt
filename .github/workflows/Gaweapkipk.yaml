@@ -22,6 +22,7 @@ on:
           - luci-app-argon-config
           - autocore
           - autocore-x86
+          - autocore-arm
           
         
 jobs:
