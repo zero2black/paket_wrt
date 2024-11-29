@@ -1,12 +1,10 @@
-name: Sync autocore-arm
+name: Copy autocore-arm Files
 
 on:
-  workflow_dispatch: # Manual trigger
-  schedule: # Runs daily at midnight (optional)
-    - cron: '0 0 * * *'
+  workflow_dispatch: # Trigger manually
 
 jobs:
-  sync-autocore-arm:
+  copy-files:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,7 +21,7 @@ jobs:
     - name: Copy Files to autocore-arm Folder
       run: |
         mkdir -p autocore-arm
-        rsync -a source_repo/ autocore-arm/
+        cp -r source_repo/* autocore-arm/
 
     # Configure Git
     - name: Configure Git
@@ -35,5 +33,5 @@ jobs:
     - name: Commit and Push Changes
       run: |
         git add autocore-arm
-        git commit -m "Sync autocore-arm from openwrt-24.10 branch" || echo "No changes to commit"
+        git commit -m "Initial copy of autocore-arm from openwrt-24.10 branch"
         git push
