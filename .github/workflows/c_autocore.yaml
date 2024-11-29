@@ -15,8 +15,8 @@ jobs:
     # Remove existing autocore-arm folder if it exists
     - name: Remove Existing autocore-arm Folder
       run: |
-        if [ -d "autocore-arm" ]; then
-          rm -rf autocore-arm
+        if [ -d "autocore-x86" ]; then
+          rm -rf autocore-x86
         fi
 
     # Clone the source repository
@@ -27,8 +27,8 @@ jobs:
     # Copy files into the autocore-arm folder
     - name: Copy Files to autocore-arm Folder
       run: |
-        mkdir -p autocore-arm
-        cp -r source_repo/* autocore-arm/
+        mkdir -p autocore-x86
+        cp -r source_repo/* autocore-x86/
 
     # Configure Git
     - name: Configure Git
@@ -39,7 +39,7 @@ jobs:
     # Ensure autocore-arm files are staged for commit
     - name: Stage autocore-arm Folder
       run: |
-        git add autocore-arm/*
+        git add autocore-x86/*
 
     # Commit and push changes
     - name: Commit and Push Changes
