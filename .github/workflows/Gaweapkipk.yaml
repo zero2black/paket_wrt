@@ -60,7 +60,7 @@ jobs:
         with:
           name: ${{ matrix.arch }}-${{ matrix.sdk }}
           # path: bin/packages/${{ matrix.arch }}/packages_ci/*.ipk
-          path: bin/packages
+          path: bin
 
       - name: Zip packages
         run: |
