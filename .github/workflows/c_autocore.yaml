@@ -12,6 +12,13 @@ jobs:
     - name: Checkout Target Repository
       uses: actions/checkout@v3
 
+    # Remove existing autocore-arm folder if it exists
+    - name: Remove Existing autocore-arm Folder
+      run: |
+        if [ -d "autocore-arm" ]; then
+          rm -rf autocore-arm
+        fi
+
     # Clone the source repository
     - name: Clone Source Repository
       run: |
