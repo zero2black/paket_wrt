@@ -26,8 +26,8 @@ jobs:
       run: |
         git config --global user.name "${{ github.actor }}"
         git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-        git rm -r --cached luci-theme-argon
-        rm -rf luci-theme-argon
+        git rm -r --cached autocore-arm
+        rm -rf autocore-arm
         git commit -m "Delete luci-theme-argon directory"
 
     - name: Push changes
