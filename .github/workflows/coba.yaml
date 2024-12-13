@@ -40,7 +40,7 @@ jobs:
           https://github.com/zero2black/python-telegram-bot python-telegram-bot
 
       - name: Build Packages
-        uses: sbwml/openwrt-gh-action-sdk@curl
+        uses: sbwml/openwrt-gh-action-sdk@main
         env:
           ARCH: ${{ matrix.arch }}-${{ matrix.tag }}
           FEEDNAME: packages_ci
