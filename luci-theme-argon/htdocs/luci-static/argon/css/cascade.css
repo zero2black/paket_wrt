@@ -911,6 +911,7 @@ div[style="width:100%;height:300px;border:1px solid #000;background:#fff"] {
 
 .notice {
   background-color: #11cdef !important;
+  background-color: var(--primary) !important;
   color: #fff
 }
 
@@ -2024,6 +2025,10 @@ td>table>tbody>tr>td,
   max-width: 20rem;
 }
 
+.cbi-input-textarea {
+  min-width: 20rem;
+}
+
 .cbi-value input[type="text"],
 .cbi-value input[type="password"] {
   border-bottom-right-radius: 0;
@@ -2151,9 +2156,31 @@ td>table>tbody>tr>td,
 .cbi-dynlist>.item {
   position: relative;
   max-width: 25rem;
-  pointer-events: none;
+  pointer-events: auto;
   color: #8898aa;
   outline: 0;
+  cursor: move;
+  user-select: text;
+}
+
+.cbi-dynlist > .item.drag-over { 
+  border-top: 1px solid var(--primary);
+}
+
+.cbi-dynlist > .item.dragging {
+  opacity: 0.5;
+}
+
+.cbi-dynlist > .item > span {
+  pointer-events: none;
+}
+
+.cbi-dynlist > .add-item > .cbi-input-text.drag-over {
+  border-top: 1px solid var(--primary);
+}
+
+.cbi-dynlist > .add-item > .cbi-button-add.drag-over {
+  border-top: 1px solid var(--primary);
 }
 
 .cbi-dynlist[name="sshkeys"]>.item {
@@ -3927,6 +3954,10 @@ pre.command-output {
     max-width: 17rem;
   }
 
+  .cbi-input-textarea {
+    min-width: 17rem;
+  }
+
   #cbi-firewall-zone .cbi-input-select {
     min-width: 9rem;
   }
@@ -3987,6 +4018,10 @@ pre.command-output {
     min-width: 17rem;
     max-width: 17rem;
     /* max-height: 2.35rem; */
+  }
+
+  .cbi-input-textarea {
+    min-width: 17rem;
   }
 
   [id^="cbid.wolplus."].cbi-dropdown {
@@ -4420,7 +4455,7 @@ pre.command-output {
   }
 
   .cbi-dropdown[open]>ul.dropdown {
-    left: 0.785rem !important;
+    left: 0 !important;
     right: 0 !important;
     margin-bottom: 1rem;
   }
@@ -4473,6 +4508,12 @@ pre.command-output {
     border-bottom: white 1px solid;
     border-bottom: var(--white) 1px solid;
     border-radius: 0;
+  }
+}
+
+@media (max-height: 530px) {
+  .mobile-hide {
+    display: none !important;
   }
 }
 
