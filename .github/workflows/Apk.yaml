@@ -43,7 +43,7 @@ jobs:
           tag: luci-app-diskman-snapshot-apk
           allowUpdates: true
           replacesArtifacts: true
-          artifacts: bin/targets/x86/64/packages/*.apk
+          artifacts: bin/packages/x86_64/kwrt_packages/*.apk
           body: |
             luci-app-diskman
             Snapshot build (APK only)
