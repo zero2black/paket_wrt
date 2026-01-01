@@ -1,4 +1,4 @@
-name: luci-app-diskman-snapshot-apk
+name: Apk-snapshot
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
           FEEDNAME: kwrt_packages
           FEEDS_CONF: |
             src-git kwrt_packages https://github.com/kiddin9/kwrt-packages
-          PACKAGES: luci-app-diskman
+          PACKAGES: luci-app-diskman luci-app-internet-detector luci-app-poweroffdevice luci-app-ramfree luci-app-tailscale
           BUILD_APK: true
           BUILD_IPK: false
           NO_REFRESH_CHECK: true
@@ -40,7 +40,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.REALESES_TOKEN }}
-          tag: luci-app-diskman-snapshot-apk
+          tag: x86_64_apk
           allowUpdates: true
           replacesArtifacts: true
           artifacts: bin/packages/x86_64/kwrt_packages/*.apk
