@@ -22,7 +22,7 @@ jobs:
     # Clone the source repository
     - name: Clone Source Repository
       run: |
-        git clone --depth 1 --branch openwrt-24.10 https://github.com/sbwml/autocore-arm.git source_repo
+        git clone --depth 1 --branch openwrt-25.12 https://github.com/sbwml/autocore-arm.git source_repo
 
     # Copy files into the autocore-arm folder
     - name: Copy Files to autocore-arm Folder
