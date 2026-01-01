@@ -1,0 +1,57 @@
+name: luci-app-diskman-snapshot-apk
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build x86_64 snapshot apk
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add kwrt-packages feed
+        run: |
+          git clone https://github.com/kiddin9/kwrt-packages package/kwrt-packages
+
+      - name: Build luci-app-diskman (APK only)
+        uses: sbwml/openwrt-gh-action-sdk@helloworld
+        env:
+          ARCH: x86_64-snapshot
+          FEEDNAME: kwrt_packages
+          FEEDS_CONF: |
+            src-git kwrt_packages https://github.com/kiddin9/kwrt-packages
+          PACKAGES: luci-app-diskman
+          BUILD_APK: true
+          BUILD_IPK: false
+          NO_REFRESH_CHECK: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: luci-app-diskman-apk
+          path: bin/targets/x86/64/packages/*.apk
+
+      - name: Release APK
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.REALESES_TOKEN }}
+          tag: luci-app-diskman-snapshot-apk
+          allowUpdates: true
+          replacesArtifacts: true
+          artifacts: bin/targets/x86/64/packages/*.apk
+          body: |
+            luci-app-diskman
+            Snapshot build (APK only)
+            Source feed:
+            https://github.com/kiddin9/kwrt-packages
+
+      - name: Cleanup old workflow runs
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          retain_days: 1
+          keep_minimum_runs: 0
