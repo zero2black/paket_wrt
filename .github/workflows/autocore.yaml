@@ -91,7 +91,7 @@ jobs:
           allowUpdates: true
           replacesArtifacts: true
           bodyFile: "release.txt"
-          tag: ${{ matrix.arch }}-apk
+          tag: ${{ matrix.arch }}_apk
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@main
