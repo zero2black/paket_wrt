@@ -21,7 +21,7 @@ jobs:
       - name: Build luci packages (APK only)
         uses: sbwml/openwrt-gh-action-sdk@helloworld
         env:
-          ARCH: x86_64-snapshot
+          ARCH: x86_64-25.12.0-rc1
           FEEDNAME: kwrt_packages
           FEEDS_CONF: |
             src-git kwrt_packages https://github.com/kiddin9/kwrt-packages
