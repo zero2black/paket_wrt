@@ -18,24 +18,50 @@ jobs:
         run: |
           git clone https://github.com/kiddin9/kwrt-packages package/kwrt-packages
 
-      - name: Build luci-app-diskman (APK only)
+      - name: Build luci packages (APK only)
         uses: sbwml/openwrt-gh-action-sdk@helloworld
         env:
           ARCH: x86_64-snapshot
           FEEDNAME: kwrt_packages
           FEEDS_CONF: |
             src-git kwrt_packages https://github.com/kiddin9/kwrt-packages
-          PACKAGES: xmm-modem luci-app-adguardhome luci-app-disks-info luci-theme-argon luci-app-argon-config luci-app-diskman luci-app-internet-detector luci-app-poweroffdevice luci-app-ramfree luci-app-tailscale
+          PACKAGES: |
+            xmm-modem
+            luci-app-adguardhome
+            luci-app-disks-info
+            luci-theme-argon
+            luci-app-argon-config
+            luci-app-diskman
+            luci-app-internet-detector
+            luci-app-poweroffdevice
+            luci-app-ramfree
+            luci-app-tailscale
           BUILD_APK: true
           BUILD_IPK: false
           NO_REFRESH_CHECK: true
 
+      # 🔥 FILTER APK (BUANG i18n)
+      - name: Prepare APK artifacts (exclude i18n)
+        run: |
+          mkdir -p release_apk
+
+          find bin/packages/x86_64/kwrt_packages \
+            -type f \
+            -name "*.apk" \
+            ! -name "*i18n*" \
+            -exec cp {} release_apk/ \;
+
+          echo "===== APK YANG AKAN DIRELEASE ====="
+          ls -lh release_apk
+
+      # (Optional) Upload artifact ke workflow (debug / download manual)
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: luci-app-diskman-apk
-          path: bin/targets/x86/64/packages/*.apk
+          name: apk-no-i18n
+          path: release_apk/*.apk
 
+      # 🚀 RELEASE (PASTI BERSIH)
       - name: Release APK
         uses: ncipollo/release-action@v1
         with:
@@ -43,9 +69,7 @@ jobs:
           tag: x86_64_apk
           allowUpdates: true
           replacesArtifacts: true
-          artifacts: |
-            bin/packages/x86_64/kwrt_packages/*.apk
-            !bin/packages/x86_64/kwrt_packages/*i18n*.apk
+          artifacts: release_apk/*.apk
           body: |
             luci-app-diskman
             Snapshot build (APK only)
