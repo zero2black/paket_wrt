@@ -169,7 +169,7 @@ li {
   padding: 0.5em;
   text-align: center;
   vertical-align: middle;
-  max-width: 375px;
+  max-width: 100%;
   word-wrap: break-word;
 }
 
@@ -655,7 +655,7 @@ h5 {
   box-sizing: border-box;
   width: 100%;
   text-align: center;
-  line-height: 1.6rem;
+  line-height: 1.4;
   display: flex;
   justify-content: space-evenly;
   margin-top: auto;
@@ -664,6 +664,7 @@ h5 {
   color: #525461;
   color: var(--default);
   position: absolute;
+  white-space: normal;
   bottom: 0
 }
 
@@ -1046,8 +1047,8 @@ div[style="width:100%;height:300px;border:1px solid #000;background:#fff"] {
 
 .main .main-left .nav li a {
   display: block;
-  color: #69758c;
-  font-weight: bolder
+  color: var(--main-left-font-color);
+  font-weight: var(--font-weight)
 }
 
 .main .main-left .nav li.slide {
@@ -1395,7 +1396,7 @@ h5 {
 [data-page^="admin-system-admin"]:not(.node-main-login) .cbi-map:not(#cbi-dropbear),
 [data-page="admin-system-opkg"] #maincontent>.container {
   font-family: -apple-system,BlinkMacSystemFont,PingFang SC,Segoe UI,Microsoft YaHei,wenquanyi micro hei,Hiragino Sans GB,Hiragino Sans GB W3,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Helvetica,Arial,sans-serif;
-  font-weight: 600;
+  font-weight: var(--font-weight);
   font-style: normal;
   line-height: normal;
   min-width: inherit;
@@ -1422,7 +1423,7 @@ h5 {
 .cbi-map-descr,
 .cbi-section-descr {
   font-size: small;
-  font-weight: bolder;
+  font-weight: var(--font-weight);
   line-height: 1.42857143;
   padding: 0.5rem 1.5rem;
 }
@@ -1594,6 +1595,10 @@ td>table>tbody>tr>td,
 .cbi-value-field>table>tbody>tr>td,
 .cbi-value-field>.table>.tbody>.tr>.td {
   border: 0;
+}
+
+.table .th, .table .td {
+  display: table-cell;
 }
 
 /* button style */
@@ -1855,12 +1860,27 @@ td>table>tbody>tr>td,
   text-decoration: none;
   color: #5e6795;
   padding: .5rem .8rem;
-  font-weight: bold
+  font-weight: var(--font-weight)
 }
 
 .tabs li:hover {
   border-bottom: .18751rem solid #5e72e4;
   border-bottom: .18751rem solid var(--primary)
+}
+
+.cbi-tab-disabled[data-errors]::after {
+  content: attr(data-errors);
+  background: #c43c35;
+  color: #fff;
+  height: 1rem;
+  min-width: 1rem;
+  border-radius: 1rem;
+  text-align: center;
+  margin: 0 5px 0 0;
+  padding: 2px 2px 2px 2px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .cbi-tabmenu {
@@ -1934,6 +1954,10 @@ td>table>tbody>tr>td,
 
 .cbi-section-node {
   padding: 0
+}
+
+.cbi-section em {
+  margin: .5rem
 }
 
 .cbi-section .cbi-section-remove:nth-of-type(2n),
@@ -2038,11 +2062,13 @@ td>table>tbody>tr>td,
 
 .cbi-value input[type="text"]+.cbi-button-neutral,
 .cbi-value input[type="password"]+.cbi-button-neutral {
-  height: 42px;
+  height: 41.5px;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
   margin-left: 0;
   border: 0;
+  position: relative;
+  top: -0.8px;
 }
 
 #cbi-firewall-zone .cbi-input-select,
@@ -2117,6 +2143,38 @@ td>table>tbody>tr>td,
 .td.cbi-section-actions {
   text-align: right !important;
   vertical-align: middle;
+}
+
+.cbi-section.fade-in .cbi-title {
+  position: relative;
+  min-height: 2.765rem;
+  display: flex;
+  align-items: center
+}
+
+.cbi-section.fade-in .cbi-title>div:last-child {
+  position: absolute;
+  right: 1rem
+}
+
+.cbi-section.fade-in .cbi-title>div:last-child span {
+  display: inline-block;
+  position: relative;
+  font-size: 0
+}
+
+.cbi-section.fade-in .cbi-title>div:last-child span::after {
+  content: "\e90f";
+  font-family: 'argon' !important;
+  font-size: 1.1rem;
+  display: inline-block;
+  transition: transform 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1
+}
+
+.cbi-section.fade-in .cbi-title>div:last-child span[data-style='inactive']::after {
+  transform: rotate(90deg);
 }
 
 @media screen and (min-width: 1280px) {
@@ -2281,7 +2339,7 @@ td>table>tbody>tr>td,
 }
 
 .cbi-dynlist>.add-item .cbi-button-add {
-  width: 2.5rem !important;
+  width: 2.32rem !important;
   padding: .5rem 0 !important;
   font-weight: normal;
   font-size: 1.2rem;
@@ -2310,12 +2368,12 @@ td>table>tbody>tr>td,
 .cbi-dropdown {
   position: relative;
   display: inline-flex;
-  min-height: 2.1875rem;
+  min-height: 3.1rem;
 }
 
 [id^="cbid."][id$=".interface"].cbi-dropdown,
 [id^="cbid."][id$=".listen_interfaces"].cbi-dropdown {
-  max-height: 2.569rem;
+  max-height: 2.6rem;
 }
 
 [id^="cbid.natmap."][id$=".interface"].cbi-dropdown {
@@ -2421,7 +2479,17 @@ td>table>tbody>tr>td,
 
 .cbi-dropdown>ul>li img {
   margin-right: .25em;
-  vertical-align: middle
+  vertical-align: middle;
+  max-width: 1.275rem
+}
+
+.table.cbi-section-table img.middle {
+  max-width: 1.275rem
+}
+
+.cbi-section .cbi-dropdown,
+.cbi-page-actions .cbi-dropdown {
+  min-height: 2.5rem !important
 }
 
 .cbi-dropdown>ul>li>form>input[type="checkbox"] {
@@ -2542,6 +2610,7 @@ td>table>tbody>tr>td,
   border-radius: 12px;
   overflow: hidden;
   color: #2e2b60;
+  color: var(--progressbar-font-color);
 }
 
 .cbi-progressbar>div {
@@ -2559,7 +2628,7 @@ td>table>tbody>tr>td,
   /* font-size-adjust: 0.38; */
   line-height: normal;
   position: absolute;
-  top: 3.55px;
+  /* top: 1.5px; */
   right: 0;
   bottom: 2px;
   left: 0;
@@ -2590,7 +2659,7 @@ td>table>tbody>tr>td,
   flex-wrap: wrap;
   width: 90%;
   min-width: 270px;
-  max-width: 600px;
+  max-width: 800px;
   min-height: 32px;
   margin: 5em auto;
   padding: 1em;
@@ -2608,13 +2677,13 @@ td>table>tbody>tr>td,
 
 .modal>pre,
 .modal>textarea {
-  font-size: 1.22rem;
-  font-size-adjust: 0.35;
+  font-size: 1.1rem;
+  font-size-adjust: 0.41;
   overflow: auto;
   margin-bottom: 0.5em;
   padding: 8.5px;
   cursor: auto;
-  white-space: pre-wrap;
+  /* white-space: pre-wrap; */
   color: #ffc100;
   outline: 0;
   background-color: #101010;
@@ -2750,7 +2819,7 @@ body.modal-overlay-active #modal_overlay {
   left: .2em;
   width: 32px;
   content: "";
-  background: url(/luci-static/resources/icons/loading.gif) no-repeat center;
+  background: url(../icon/loading.svg) no-repeat center;
   background-size: 16px
 }
 
@@ -2840,7 +2909,8 @@ td>.ifacebadge,
 .ifacebadge>em,
 .ifacebadge>img {
   display: inline-block;
-  margin: 0 .75rem
+  margin: 0 .75rem;
+  max-width: 1.275rem
 }
 
 .ifacebadge>img+img {
@@ -3192,7 +3262,7 @@ span[data-tooltip] .label {
   padding: 2px 5px;
   opacity: 0;
   transition: opacity .25s ease-in;
-  transform: translate(-50%, 10%);
+  transform: translate(0%, 60%);
 }
 
 .cbi-tooltip-container:hover .cbi-tooltip:not(:empty) {
@@ -3352,7 +3422,12 @@ div[style*="display:grid;grid-template-columns:repeat"] .ifacebox .ifacebox-body
 }
 
 div[style*="display:grid;grid-template-columns:repeat"] .ifacebox .ifacebox-body .cbi-tooltip-container {
-  font-size: inherit !important
+  font-size: inherit !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 0.5em !important;
+  white-space: nowrap !important;
 }
 
 @media screen and (max-width:484px) {
@@ -3412,15 +3487,6 @@ div[style*="display:grid;grid-template-columns:repeat"] .ifacebox .ifacebox-body
 
 [data-page="admin-system-filetransfer"] .cbi-section-table {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03)
-}
-
-#cbi-samba [data-tab="template"] .cbi-value-field {
-  display: block
-}
-
-#cbi-samba [data-tab="template"] .cbi-value-title {
-  width: auto;
-  padding-bottom: 0.6rem;
 }
 
 /* admin-system-admin-password */
@@ -3588,11 +3654,16 @@ div[style*="display:grid;grid-template-columns:repeat"] .ifacebox .ifacebox-body
 
 [data-page="admin-system-flash"] .modal .btn {
   white-space: normal !important;
+  text-align: left !important;
 }
 
 [data-page="admin-system-flash"] .modal label.btn {
-  background-color: #5e72e4;
-  background-color: var(--primary);
+  background-color: hsl(from var(--primary) h s l / 20%);
+  color: var(--primary) !important;
+}
+
+[data-page="admin-system-flash"] input[type="checkbox"] {
+  border: 1px solid hsl(from var(--primary) h s l / 60%) !important;
 }
 
 /* wireless overview */
@@ -4107,10 +4178,11 @@ pre.command-output {
 
   .cbi-progressbar::after {
     font-size: 0.785rem;
+    top: 3px
   }
 
   .cbi-value-title {
-    width: 14rem;
+    width: 11rem;
     padding-right: 1rem;
   }
 
@@ -4205,11 +4277,49 @@ pre.command-output {
     /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 2px 0 rgba(0, 0, 0, 0.12); */
   }
 
+  [id*="samba"].cbi-section-table,
+  [id*="samba"].cbi-section-table thead,
+  [id*="samba"].cbi-section-table tbody,
+  [id*="samba"].cbi-section-table-row,
+  [id*="samba"].cbi-section-table-titles {
+    display: block !important;
+    width: 100% !important;
+  }
+  [id*="samba"].cbi-section-table-titles {
+    display: none !important;
+  }
   [id*="samba"].cbi-section-table-row {
+    display: flex !important;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.03);
+    padding: 6px 3px;
+  }
+  [id*="samba"].cbi-section-table-row .td {
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    min-width: max-content;
+    align-items: center;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 6px 5px;
+    font-size: 15px;
+    border: none !important;
+  }
+  [id*="samba"].cbi-section-table-row .td[data-title]:before {
+    margin-right: 8px;
+    font-size: 14px;
+    min-width: 70px;
+    display: inline-block;
+  }
+  [id*="samba"].cbi-section-actions {
+    width: 100% !important;
+    margin-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  [id*="samba"] tr.tr.cbi-section-table-titles.anonymous {
+    display: none;
   }
 
   .tr.cbi-section-table-row[id*="wolplus"],
@@ -4222,7 +4332,7 @@ pre.command-output {
   .cbi-section-table-cell {
     display: inline-block;
     flex: 10 10 auto;
-    flex-basis: 50%;
+    /* flex-basis: 50%; */
     text-align: center;
   }
 
@@ -4296,6 +4406,16 @@ pre.command-output {
   }
 }
 
+@media screen and (min-width: 1281px) and (max-width: 1500px) {
+  /* admin/system/diskman */
+  #cbi-diskman tr>td,
+  #cbi-diskman tr>th,
+  #cbi-diskman .tr>.td,
+  #cbi-diskman .tr>.th {
+    padding: 0.5rem;
+  }
+}
+
 @media screen and (max-width: 768px) {
   body {
     font-size: 0.8rem;
@@ -4303,6 +4423,7 @@ pre.command-output {
 
   .cbi-progressbar::after {
     font-size: 0.675rem;
+    top: 4.5px
   }
 
   .main-left {
@@ -4370,7 +4491,7 @@ pre.command-output {
 @media screen and (max-width: 600px) {
   .modal>pre,
   .modal>textarea {
-    font-size: 0.8rem;
+    font-size: 0.98rem;
   }
 
   .mobile-hide {
@@ -4631,7 +4752,7 @@ div#service_status {
 
 /* 接口名字 */
 .cbi-section.cbi-tblsection strong {
-  font-weight: bold;
+  font-weight: var(--font-weight);
 }
 
 /* passwall faq */
@@ -4648,4 +4769,178 @@ div#add_link_div {
   padding: 0px;
   box-shadow: darkgrey 1px 5px 20px 0px;
   border-radius: 9px;
+}
+
+/* luci-app-ddns logs */
+[data-page="admin-services-ddns"] {
+  #syslog {
+    overflow: auto;
+    font-size: 12px!important;
+  }
+  .modal p {
+    margin-left: unset;
+  }
+  [data-tab-title] p {
+    margin-left: unset;
+    margin-bottom: unset;
+  }
+}
+
+/* luci-app-filemanager */
+
+#file-manager-container button#go-button {
+  cursor: pointer;
+}
+
+#file-manager-container .file-manager-header {
+    padding: 4px;
+}
+
+/* luci-mod-dashboard */
+.Dashboard .dashboard-bg {
+  background-color: #ffffff !important;
+}
+
+.Dashboard h3 {
+  color: #69758c !important;
+  border-radius: 0 0 16px 16px;
+}
+
+.Dashboard:not(.some-other-class) {
+  color: #666a88 !important;
+}
+
+.Dashboard .title {
+  background-color: var(--primary) !important;
+  border-radius: 16px;
+}
+
+.Dashboard span.label.label-success {
+  background-color: #55bb55;
+}
+
+.Dashboard .cbi-rowstyle-1 {
+  background-color: #ffffff;
+}
+
+.Dashboard .devices-list .devices-info, .Dashboard .router-status-wifi .wifi-info > hr:last-child {
+  margin-top: 0.575rem;
+}
+
+/* luci-app-mwan3 */
+#mwan3-service-status > .alert-message {
+  height: 6rem !important;
+  min-height: 8rem !important;
+}
+
+@media screen and (max-width: 600px) {
+  div#content-filemanager {
+    overflow-x: auto;
+  }
+}
+
+/* admin/system/admin/repokeys */
+[data-page="admin-system-admin-repokeys"] .cbi-section-node {
+  padding: 9px;
+  background: var(--cbi-bg, #f8f9fa);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px 0 rgba(60, 60, 60, 0.08);
+  margin: 32px auto;
+  font-family: 'Segoe UI', 'PingFang SC', 'Hiragino Sans', Arial, sans-serif;
+}
+
+[data-page="admin-system-admin-repokeys"] .cbi-dynlist {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: stretch;
+}
+
+[data-page="admin-system-admin-repokeys"] .cbi-dynlist .item {
+  background: var(--item-bg, #fff);
+  border-radius: 8px;
+  border: 1px solid #e2e3e7;
+  padding: 18px 20px;
+  transition: box-shadow 0.2s;
+  box-shadow: 0 1px 4px 0 rgba(60,60,60,0.04);
+  position: relative;
+  word-break: break-all;
+}
+
+[data-page="admin-system-admin-repokeys"] .cbi-dynlist .item:hover {
+  box-shadow: 0 4px 18px 0 rgba(0,0,0,0.11);
+  border-color: #b6b7bb;
+}
+
+[data-page="admin-system-admin-repokeys"] .cbi-dynlist .item strong {
+  font-size: 1.1rem;
+  color: #276ef1;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+[data-page="admin-system-admin-repokeys"] .cbi-dynlist .item code {
+  display: block;
+  background: #f2f5fa;
+  color: #3d4852;
+  padding: 5px 8px;
+  border-radius: 4px;
+  margin-bottom: 3px;
+  font-size: 0.98em;
+  font-family: 'Fira Mono', 'Menlo', 'Consolas', monospace;
+}
+
+[data-page="admin-system-admin-repokeys"] .cbi-dynlist>.item {
+  max-width: 39rem;
+}
+
+[data-page="admin-system-admin-repokeys"] .cbi-dynlist .item code:last-child {
+  margin-bottom: 0;
+}
+
+[data-page="admin-system-admin-repokeys"] .cbi-dynlist .add-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+[data-page="admin-system-admin-repokeys"] .cbi-dynlist .add-item textarea.cbi-input-text {
+  flex: 1;
+  min-height: 46px;
+  max-width: 500px;
+  padding: 12px;
+  border: 1.5px solid #d7dae5;
+  border-radius: 6px;
+  background: #fcfcfd;
+  font-size: 1em;
+  transition: border-color 0.2s;
+  resize: vertical;
+}
+
+[data-page="admin-system-admin-repokeys"] .cbi-dynlist .add-item textarea.cbi-input-text:focus {
+  border-color: #276ef1;
+  outline: none;
+  background: #f2f7ff;
+}
+
+[data-page="admin-system-admin-repokeys"] .cbi-dynlist .add-item .cbi-button {
+  border-radius: 6px;
+  padding: 14px 22px;
+  font-size: 1.06em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s, box-shadow 0.16s;
+  box-shadow: 0 2px 6px 0 rgba(39,110,241,0.10);
+}
+
+@media (max-width: 600px) {
+  [data-page="admin-system-admin-repokeys"] .cbi-section-node {
+    padding: 8px;
+    max-width: 100vw;
+  }
+  [data-page="admin-system-admin-repokeys"] .cbi-dynlist .add-item textarea.cbi-input-text {
+    max-width: 100vw;
+  }
 }
