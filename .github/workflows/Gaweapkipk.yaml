@@ -23,6 +23,7 @@ on:
           - autocore
           - autocore-x86
           - autocore-arm
+          - luci-app-tailscale-community
           
         
 jobs:
