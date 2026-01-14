@@ -26,16 +26,7 @@ jobs:
           FEEDS_CONF: |
             src-git kwrt_packages https://github.com/kiddin9/kwrt-packages
           PACKAGES: |
-            xmm-modem
-            luci-app-adguardhome
-            luci-app-disks-info
-            luci-theme-argon
-            luci-app-argon-config
-            luci-app-diskman
-            luci-app-internet-detector
-            luci-app-poweroffdevice
-            luci-app-ramfree
-            luci-app-tailscale
+            luci-app-tailscale-community
           BUILD_APK: true
           BUILD_IPK: false
           NO_REFRESH_CHECK: true
