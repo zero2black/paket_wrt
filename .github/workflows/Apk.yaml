@@ -27,6 +27,15 @@ jobs:
             src-git kwrt_packages https://github.com/kiddin9/kwrt-packages
           PACKAGES: |
             luci-app-tailscale-community
+            xmm-modem
+            luci-app-adguardhome
+            luci-app-disks-info
+            luci-theme-argon
+            luci-app-argon-config
+            luci-app-diskman
+            luci-app-internet-detector
+            luci-app-poweroffdevice
+            luci-app-ramfree
           BUILD_APK: true
           BUILD_IPK: false
           NO_REFRESH_CHECK: true
@@ -67,8 +76,4 @@ jobs:
             Source feed:
             https://github.com/kiddin9/kwrt-packages
 
-      - name: Cleanup old workflow runs
-        uses: Mattraks/delete-workflow-runs@main
-        with:
-          retain_days: 1
-          keep_minimum_runs: 0
+      
